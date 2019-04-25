@@ -197,3 +197,9 @@ firewall-cmd --reload
 #4.2如果要在一台装有pxc 的服务器上起garbd就要更改默认的pxc集群的通信端口
 #cd /usr/local/mysql/bin/
 #./garbd --group=pxc-xiaoboluo --address=gcomm://192.168.8.50,192.168.8.51 --option=gmcast.listen_addr=tcp://192.168.8.51:5567 -d -l /tmp/garbd.log
+
+#在线安全的清空慢查询日志
+#set global slow_query_log=0;
+#show variables like '%slow%';
+#set global slow_query_log_file='/usr/local/mysql/data/zabbixserver-slow.log';
+#set global slow_query_log=1;
