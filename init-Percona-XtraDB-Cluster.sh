@@ -71,6 +71,7 @@ tmpdir = /tmp
 user = mysql
 log-error = /usr/local/mysql/logs/mysql.log
 slow_query_log = ON
+long_query_time = 1
 log-bin = mysql-bin
 binlog-format=ROW
 #max_allowed_packet = 64M
