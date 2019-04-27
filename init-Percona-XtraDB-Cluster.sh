@@ -105,7 +105,9 @@ wsrep_provider=/usr/local/mysql/lib/libgalera_smm.so
 wsrep_cluster_address=gcomm://192.168.8.50,192.168.8.51,192.168.8.52                                             
 wsrep_slave_threads=8                                                     
 default_storage_engine=InnoDB                                                 
-innodb_autoinc_lock_mode=2                                                   
+innodb_autoinc_lock_mode=2   
+innodb_locks_unsafe_for_binlog = 1
+innodb_flush_log_at_trx_commit = 2                                                
 wsrep_cluster_name=pxc-xiaoboluo                                             
 wsrep_sst_auth=sst:xiaoboluo                                                  
 wsrep_sst_method=xtrabackup-v2                                                
@@ -198,8 +200,4 @@ firewall-cmd --reload
 #cd /usr/local/mysql/bin/
 #./garbd --group=pxc-xiaoboluo --address=gcomm://192.168.8.50,192.168.8.51 --option=gmcast.listen_addr=tcp://192.168.8.51:5567 -d -l /tmp/garbd.log
 
-#在线安全的清空慢查询日志
-#set global slow_query_log=0;
-#show variables like '%slow%';
-#set global slow_query_log_file='/usr/local/mysql/data/zabbixserver-slow.log';
-#set global slow_query_log=1;
+#mysqldump -uroot -p'Root_123456*0987' -A --skip-add-locks --skip-lock-tables -F |gzip > /tmp/all_$(date +%F).sql.gz
