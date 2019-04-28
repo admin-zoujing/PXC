@@ -12,7 +12,6 @@ sed -i 's|SELINUXTYPE=.*|#SELINUXTYPE=targeted|' /etc/sysconfig/selinux
 setenforce 0 && systemctl stop firewalld && systemctl disable firewalld 
 setenforce 0 && systemctl stop iptables && systemctl disable iptables
 
-
 rm -rf /var/run/yum.pid 
 rm -rf /var/run/yum.pid
 yum -y install epel-release
@@ -176,7 +175,6 @@ firewall-cmd --reload
 
 # show global status like 'wsrep%';
 
-
 #root用户登录测试
 #mysql -uroot -pRoot_123456*0987
 
@@ -190,7 +188,6 @@ firewall-cmd --reload
 #授权：GRANT ALL PRIVILEGES ON *.* TO 'springdev'@'%' IDENTIFIED BY 'springdev_mysql' WITH GRANT OPTION;
 #刷新：flush privileges;
 #创库：CREATE DATABASE springdev default charset 'utf8mb4';
-
 
 #4.1 #启用garbd，pxc集群最少是要3台，如果没有可以使用仲裁者garbd，用来解决
 #cd /usr/local/mysql/bin/
