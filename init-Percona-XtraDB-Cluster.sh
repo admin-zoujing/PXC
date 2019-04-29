@@ -12,6 +12,7 @@ sed -i 's|SELINUXTYPE=.*|#SELINUXTYPE=targeted|' /etc/sysconfig/selinux
 setenforce 0 && systemctl stop firewalld && systemctl disable firewalld 
 setenforce 0 && systemctl stop iptables && systemctl disable iptables
 
+
 rm -rf /var/run/yum.pid 
 rm -rf /var/run/yum.pid
 yum -y install epel-release
@@ -104,7 +105,8 @@ expire_logs_days = 7
 server-id = 1 
 wsrep_node_address=192.168.8.50  
 wsrep_node_name = node50
-#本机IP放最后
+#节点故障时指定同步某节点的数据
+#wsrep_sst_donor = node50
 wsrep_cluster_address=gcomm://192.168.8.50,192.168.8.51,192.168.8.52   
 
 pxc_strict_mode=PERMISSIVE
@@ -155,8 +157,10 @@ systemctl enable mysqld.service
 systemctl restart mysqld.service
 chown -Rf mysql:mysql /usr/local/mysql
 
-#只有主节点启动这样，不是主节点的改启动脚本
+#主节点的配置
+#grastate.dat（safe_to_bootstrap: 1）
 #/usr/local/mysql/bin/mysqld --defaults-file=/usr/local/mysql/conf/my.cnf  --wsrep-new-cluster &
+#所有节点断电重启后，主节点要重新授权一下复制用户，否则其他节点起不来
 
 #查看默认root本地登录密码如果不是用空密码初始化的数据库则：
 grep 'temporary password' /usr/local/mysql/logs/mysql.log | awk -F: '{print $NF}'
