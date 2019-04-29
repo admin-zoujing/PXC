@@ -53,6 +53,12 @@ cp /usr/local/mysql/Percona-XtraDB-Cluster-5.7.24-31.33/support-files/mysql.serv
 chown -Rf mysql:mysql /usr/local/mysql
 chmod 755 /etc/init.d/mysqld
 
+cat > /etc/hosts <<EOF
+192.168.8.50 node50
+192.168.8.51 node51
+192.168.8.52 node52
+EOF
+
 cat > /usr/local/mysql/conf/my.cnf <<EOF
 [client]
 default-character-set=utf8mb4
@@ -96,12 +102,13 @@ max_binlog_size = 1G
 expire_logs_days = 7
 
 server-id = 1 
-wsrep_node_name=node50
 wsrep_node_address=192.168.8.50  
+wsrep_node_name = node50
+#本机IP放最后
+wsrep_cluster_address=gcomm://192.168.8.50,192.168.8.51,192.168.8.52   
 
 pxc_strict_mode=PERMISSIVE
-wsrep_provider=/usr/local/mysql/lib/libgalera_smm.so                          
-wsrep_cluster_address=gcomm://192.168.8.50,192.168.8.51,192.168.8.52                                             
+wsrep_provider=/usr/local/mysql/lib/libgalera_smm.so                                                                   
 wsrep_slave_threads=8                                                     
 default_storage_engine=InnoDB                                                 
 innodb_autoinc_lock_mode=2   
@@ -175,6 +182,7 @@ firewall-cmd --reload
 
 # show global status like 'wsrep%';
 
+
 #root用户登录测试
 #mysql -uroot -pRoot_123456*0987
 
@@ -188,6 +196,7 @@ firewall-cmd --reload
 #授权：GRANT ALL PRIVILEGES ON *.* TO 'springdev'@'%' IDENTIFIED BY 'springdev_mysql' WITH GRANT OPTION;
 #刷新：flush privileges;
 #创库：CREATE DATABASE springdev default charset 'utf8mb4';
+
 
 #4.1 #启用garbd，pxc集群最少是要3台，如果没有可以使用仲裁者garbd，用来解决
 #cd /usr/local/mysql/bin/
